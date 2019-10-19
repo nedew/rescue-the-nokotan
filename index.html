@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>のこたんを救え！</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
+  <script type="text/javascript" src="script.js"></script>
+</head>
+<body>
+  <p id="loading">読み込み中・・・</p>
+  <a-scene id="scene" style="display:none">
+    <a-entity id="camera" camera look-controls position="0 1.6 0">
+      <a-entity
+        animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.05 0.05 0.05; to: 0.2 0.2 0.2"
+        animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 0.2 0.2 0.2; to: 0.05 0.05 0.05"
+        animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 0.2 0.2 0.2"
+        cursor="fuse: true;"
+        material="color: black; shader: flat"
+        position="0 0 -3"
+        geometry="primitive: ring; scale: 0.2 0.2 0.2">
+      </a-entity>
+    </a-entity>
+
+    <a-sky id="sky" src="images/background/start.jpg" color="#DDDDDD" rotation="0 -94 0"></a-sky>
+
+    <a-text
+      class="toppage-elm"
+      value="のこたんを救え！"
+      font="fonts/MPLUSRounded1c-Bold-msdf/MPLUSRounded1c-Bold-msdf.json"
+      position="-1.5 2.8 -3" color="green" negate="false" scale="2 2 1">
+    </a-text>
+    <a-entity
+      class="toppage-elm"
+      geometry="primitive: plane; width: 3.4; height: 2.2"
+      material="color: black; opacity: 0.6"
+      position="0 1.25 -3.5">
+      <a-text
+        value="このゲームはVRゲームです。\nあそぶ準備が出来たら\nスタートボタンを押してください。\n\n\n\n\n\n"
+        font="fonts/MPLUSRounded1c-Bold-msdf/MPLUSRounded1c-Bold-msdf.json"
+        color="white"
+        width="4.5"
+        align="center"
+        negate="false"
+        position="0 0 0.1">
+      </a-text>
+    </a-entity>
+    <a-entity
+      class="toppage-elm"
+      cursor-listener="startGame()"
+      geometry="primitive: plane; width: 1.13; height: 0.4"
+      material="color: red"
+      position="0 0.8 -3.4">
+      <a-text
+        value="スタート"
+        color="white"
+        font="fonts/MPLUSRounded1c-Bold-msdf/MPLUSRounded1c-Bold-msdf.json"
+        width="6"
+        negate="false"
+        align="center"
+        position="0 0 0.05">
+      </a-text>
+    </a-entity>
+  </a-scene>
+</body>
+</html>

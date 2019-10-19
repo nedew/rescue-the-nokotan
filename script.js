@@ -63,7 +63,7 @@ let sceneConfig = {
     }
   },
   scene4: {
-    backgroundImage: 'shop.JPG',
+    backgroundImage: 'shop.jpg',
     scenario: [
       [1, 'サルににげられてしまったにょん・・・。池にいくまえに、サルのにがてなたべものを買っていくにょん！'],
       [1, 'ちゃんと買えたにょん？　それじゃあ、池にレッツゴーだにょん！'],

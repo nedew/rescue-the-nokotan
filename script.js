@@ -1,105 +1,3 @@
-// Click event
-AFRAME.registerComponent('cursor-listener', {
-  init: function () {
-    this.el.addEventListener('click', function () {
-      let funcName = this.getAttribute('cursor-listener');
-      eval(funcName);
-    });
-  }
-});
-
-
-// シナリオ設定
-let sceneConfig = {
-  scene1: {
-    backgroundImage: 'gate.jpg',
-    scenario: [
-      [1, 'おーい、そこのキミ！'],
-      [1, 'はじめまして、ボクは竹から生まれた『たけにょん』だにょん♪'],
-      [1, 'じつは、さっきまで妹の『のこたん』といっしょにこのあたりをあるいていたんだけど、とつぜんうしろから『サル』にぶつかられたんだにょん！'],
-      [1, 'なんとか立ちあがったけど、そのサルにのこたんをさらわれてしまったにょん・・・あの子がいないとボクは・・・'],
-      [1, '・・・え、キミがのこたんをさがすのをてつだってくれるの？　ありがとうだにょん！　じゃあさっそくだけどボクについてきてにょん！']
-    ],
-    mission: {
-      num: 2,
-      title: 'たけにょんをみつけよう！',
-      targetImage: 'take2-1-08.png',
-      imgPosition: '4.5 1 -3',
-      rotation: '0 -60 0',
-      aspectRatio: '0.6:1' // width:height
-    }
-  },
-  scene2: {
-    backgroundImage: 'road.jpg',
-    scenario: [
-      [1, 'ここがボクがぶつかられたばしょだにょん。そのときのことを見ていた人がいるとおもうんだけど・・・あ！　あの女の人にはなしをきいてみるにょん！'],
-      [1, 'あの！　ボクにぶつかってきたサルがどっちににげていったか見てないにょん？'],
-      [2, 'たしか・・・あっちだったとおもいますよ'],
-      [1, 'おしえてくれてありがとうだにょん！　キミ、つぎはあっちにいってみるにょん！']
-    ],
-    mission: {
-      num: 2,
-      title: '女の人にはなしをきいてみよう！',
-      targetImage: 'walking5_woman.png',
-      imgPosition: '-1.3 1.3 4',
-      rotation: '0 -180 0',
-      aspectRatio: '0.73:1'
-    }
-  },
-  scene3: {
-    backgroundImage: 'torii.jpg',
-    scenario: [
-      [1, 'このあたりにサルがいるはずにょん！　さがしてみるにょん！'],
-      [3, 'ウキキ！　のこたんをかえしてほしいなら『池』にくるウキ！'],
-      [1, 'あ、にげたにょん！　おいかけるにょん！'],
-    ],
-    mission: {
-      num: 2,
-      title: 'サルをみつけろ！',
-      targetImage: 'animal_monkey_kinobori.png',
-      imgPosition: '4.2 5 3.8',
-      rotation: '-20 55 0',
-      aspectRatio: '1.2:1.2'
-    }
-  },
-  scene4: {
-    backgroundImage: 'shop.jpg',
-    scenario: [
-      [1, 'サルににげられてしまったにょん・・・。池にいくまえに、サルのにがてなたべものを買っていくにょん！'],
-      [1, 'ちゃんと買えたにょん？　それじゃあ、池にレッツゴーだにょん！'],
-    ],
-    mission: {
-      num: 2,
-      title: 'サルのにがてなたべもの\n『トウガラシ』を買っていこう！',
-      targetImage: 'tougarashi_redpepper_text.png',
-      imgPosition: '5 1 6.2',
-      rotation: '0 225 0',
-      aspectRatio: '1.4:1.4'
-    }
-  },
-  scene5: {
-    backgroundImage: 'pond.jpg',
-    scenario: [
-      [3, 'ウキキ！　オレのナワバリにくるとは、バカなやつらウキ！　おまえたち、やってしまうウキ！'],
-      [1, 'キミ、さっき買っておいたトウガラシをサルたちになげるにょん！'],
-      [3, 'ウキ！？　そ、それはトウガラシ！　にげるウキー！'],
-      [1, 'やったにょん！　サルをおいはらったにょん！　のこたんは・・・あ、いたにょん！　あの子がのこたんだにょん！'],
-      [1, 'キミのおかげで、のこたんをたすけることができたにょん！　ほんとうにありがとうだにょん！　キミはボクのヒーローだにょん♪']
-    ],
-    mission: {
-      num: 3,
-      title: 'サルにトウガラシをなげよう！',
-      targetImage: 'saru_saruyama_boss_text.png',
-      imgPosition: '0 2.5 -8',
-      rotation: '0 0 0',
-      aspectRatio: '2:2'
-    }
-  }
-};
-
-
-
-
 let elmScene,
     elmSky,
     elmTextArea,
@@ -108,11 +6,13 @@ let elmScene,
     elmMissionHeadlineText,
     elmMissionTitle,
     elmMissionTargetImg,
-    elmCamera;
+    elmCamera,
+    elmPersonArea;
 
 let nowSceneNum = 1,
     nowSceneData,
-    nowScenarioNum;
+    nowScenarioNum,
+    nowPerson;
 
 const fonts = {
   main: 'fonts/MPLUSRounded1c-Bold-msdf/MPLUSRounded1c-Bold-msdf.json'
@@ -128,32 +28,7 @@ window.onload = () => {
   getImg();
 }
 
-// 画像をプリロード
-// const getImg = () => {
-//   const preloadImages = document.createElement('div');
-  
-//   for (let i = 0; i < Object.keys(sceneConfig).length; i++) {
-//     const scene = sceneConfig['scene'+(i+1)];
-//     console.log(scene);
 
-//     let bgImg = document.createElement('img');
-//     bgImg.src = 'images/background/' + scene.backgroundImage;
-//     preloadImages.appendChild(bgImg);
-
-//     let targetImg = document.createElement('img');
-//     targetImg.src = 'images/target/' + scene.mission.targetImage;
-//     preloadImages.appendChild(targetImg);
-//   }
-
-//   preloadImages.addEventListener('load', () => {
-//     console.log('done loading');
-//     // 「読み込み中」テキストを削除
-//     const elmLoadText = document.getElementById('loading');
-//     elmLoadText.parentNode.removeChild(elmLoadText);
-//     // A-Frameエリアを表示
-//     elmScene.removeAttribute('style');
-//   })
-// }
 const getImg = () => {
 
   let imagesUrl = [];
@@ -165,6 +40,10 @@ const getImg = () => {
     imagesUrl.push('images/background/' + scene.backgroundImage);
     imagesUrl.push('images/target/' + scene.mission.targetImage);
   }
+  for (let i = 0; i < Object.keys(personConfig).length; i++) {
+    imagesUrl.push('images/person/' + personConfig[i].img);
+  }
+  imagesUrl.push('images/other/take2-1-07.png');
 
   let images = new Array(imagesUrl.length)
   let loadingCount = 0
@@ -208,32 +87,32 @@ const startGame = () => {
   // セリフ等テキストの表示エリア
   elmTextArea = document.createElement('a-entity');
   elmTextArea.id = 'text-area';
-  elmTextArea.setAttribute('geometry', 'primitive: plane; width: 5.3; height: 1.6');
+  elmTextArea.setAttribute('geometry', 'primitive: plane; width: 5.3; height: 2');
   elmTextArea.setAttribute('material', 'color: black; opacity: 0.6');
   elmTextArea.setAttribute('position', '0 -0.1 -5');
 
   // 「次へ」ボタン
   elmNextBtn = document.createElement('a-entity');
   elmNextBtn.setAttribute('cursor-listener', 'nextScenario()');
-  elmNextBtn.setAttribute('geometry', 'primitive: plane; width: 1; height: 0.5');
-  elmNextBtn.setAttribute('material', 'color: green');
-  elmNextBtn.setAttribute('position', '2.1 -0.7 -4.9');
+  elmNextBtn.setAttribute('geometry', 'primitive: plane; width: 1; height: 0.42');
+  elmNextBtn.setAttribute('material', 'color: #006A4D');
+  elmNextBtn.setAttribute('position', '2 -0.7 -4.9');
   // 「次へ」テキスト
   elmNextBtnText = document.createElement('a-text');
-  elmNextBtnText.setAttribute('value', '次へ➡︎');
+  elmNextBtnText.setAttribute('value', 'つぎへ');
   elmNextBtnText.setAttribute('color', 'white');
   elmNextBtnText.setAttribute('font', fonts.main);
-  elmNextBtnText.setAttribute('width', '5');
+  elmNextBtnText.setAttribute('width', '6');
   elmNextBtnText.setAttribute('negate', 'false');
   elmNextBtnText.setAttribute('align', 'center');
-  elmNextBtnText.setAttribute('position', '0 0 0.1');
+  elmNextBtnText.setAttribute('position', '-0.03 0.07 0.1');
 
   // ミッション見出し
   elmMissionHeadline = document.createElement('a-entity');
   elmMissionHeadline.setAttribute('geometry', 'primitive: box; depth: 0.3; width: 1.4; height: 0.5');
   elmMissionHeadline.setAttribute('material', 'color: red');
   elmMissionHeadline.setAttribute('visible', 'false');
-  elmMissionHeadline.setAttribute('position', '0 0.6 -4.9');
+  elmMissionHeadline.setAttribute('position', '0 0.8 -4.9');
   // ミッション見出しテキスト
   elmMissionHeadlineText = document.createElement('a-text');
   elmMissionHeadlineText.setAttribute('value', 'ミッション');
@@ -250,6 +129,58 @@ const startGame = () => {
   elmMissionTargetImg.setAttribute('scale', '2 2 2');
   elmMissionTargetImg.setAttribute('visible', 'false');
 
+  // 話者の名前を表示する場所
+  elmPersonArea = document.createElement('a-entity');
+  elmPersonArea.setAttribute('geometry', 'primitive: plane; width: 1.3; height: 0.3');
+  elmPersonArea.setAttribute('material', 'color: #4169e1');
+  elmPersonArea.setAttribute('visible', 'true');
+  elmPersonArea.setAttribute('position', '0 0.7 -4.8');
+
+  // 登場人物名と立ち絵
+  for (let i = 0; Object.keys(personConfig).length > i; i++) {
+    const person = personConfig[i];
+    console.log(person);
+
+    let elmPersonName = document.createElement('a-text');
+    elmPersonName.setAttribute('value', person.displayName);
+    elmPersonName.setAttribute('color', 'white');
+    elmPersonName.setAttribute('font', fonts.main);
+    elmPersonName.setAttribute('align', 'center');
+    elmPersonName.setAttribute('width', '5');
+    elmPersonName.setAttribute('negate', 'false');
+    elmPersonName.setAttribute('visible', 'false');
+    elmPersonName.classList.value = person.label;
+    elmPersonArea.appendChild(elmPersonName);
+
+    let elmPersonImg = document.createElement('a-image');
+    elmPersonImg.setAttribute('src', 'images/person/'+person.img);
+    elmPersonImg.setAttribute('visible', 'false');
+    elmPersonImg.setAttribute('position', '-0.06 0.6 -0.1');
+    elmPersonImg.classList.value = person.label;
+    elmPersonArea.appendChild(elmPersonImg);
+  }
+
+
+  let elmBGM = document.createElement('audio');
+  elmBGM.setAttribute('src', 'sounds/bgm/bgm_maoudamashii_8bit22.mp3');
+  elmBGM.setAttribute('loop', 'loop');
+  elmBGM.setAttribute('autoplay', 'autoplay');
+  elmBGM.id = 'bgm';
+  elmBGM.volume = 0.1;
+  document.getElementsByTagName('body')[0].appendChild(elmBGM);
+
+  let elmSoundGameclear = document.createElement('audio');
+  elmSoundGameclear.setAttribute('src', 'sounds/sound-effect/game_maoudamashii_9_jingle01.mp3');
+  elmSoundGameclear.volume = 0.2;
+  elmSoundGameclear.id = 'gameclear';
+  document.getElementsByTagName('body')[0].appendChild(elmSoundGameclear);
+
+  let elmMainSE = document.createElement('audio');
+  elmMainSE.setAttribute('src', 'sounds/sound-effect/se_maoudamashii_system37.mp3');
+  elmMainSE.volume = 0.2;
+  elmMainSE.id = 'se';
+  document.getElementsByTagName('body')[0].appendChild(elmMainSE);
+
 
 
   // それぞれ子要素に追加
@@ -263,6 +194,8 @@ const startGame = () => {
   elmScene.appendChild(elmMissionHeadline);
 
   elmScene.appendChild(elmMissionTargetImg);
+
+  elmScene.appendChild(elmPersonArea);
   
 
   nextScene();
@@ -301,6 +234,9 @@ const nextScene = () => {
 
 // シナリオ進行
 const nextScenario = () => { 
+  // SE
+  document.getElementById('se').play();
+
   // 今のシーンのシナリオが全て終わったら
   console.log(nowSceneData.scenario);
   if (nowScenarioNum === nowSceneData.scenario.length) {
@@ -309,11 +245,14 @@ const nextScenario = () => {
     return;
   }
 
-  if (document.getElementById('text')) elmTextArea.removeChild(document.getElementById('text')); 
+  if (document.getElementById('text')) elmTextArea.removeChild(document.getElementById('text'));
 
   // ミッションが指定されていたら
   if (nowSceneData.mission.num === nowScenarioNum + 1) {
     startMission();
+  } else if (nowSceneData.scenario[nowScenarioNum][2] === 'nokotan') { // のこたん救出用（後で消す）
+    rescueNokotan();
+    console.log('割り込みミッション');
   } else {
     flipPage();
   }
@@ -327,8 +266,26 @@ const flipPage = () => {
   nowSceneData.scenario[nowScenarioNum][1].split(/(.{24})/).filter((e) => {
     return e;
   }).forEach((str) => {
-    scenarioText += str + '\n'
+    scenarioText += str + '\n';
   });
+
+  let nextPerson = nowSceneData.scenario[nowScenarioNum][0];
+  if (nowPerson !== nextPerson) {
+    if (nowPerson) {
+      let elmNowPerson = Array.from(document.getElementsByClassName(personConfig[nowPerson - 1].label));
+      elmNowPerson.forEach(e => {
+        e.setAttribute('visible', 'false');
+      });
+    }
+
+    let elmNextPerson = Array.from(document.getElementsByClassName(personConfig[nextPerson - 1].label));
+    elmNextPerson.forEach(e => {
+      e.setAttribute('visible', 'true');
+    });
+
+    nowPerson = nextPerson;
+  }
+  
 
   let elmText = document.createElement('a-text');
   elmText.setAttribute('font', fonts.main);
@@ -351,14 +308,16 @@ const flipPage = () => {
 // ミッション
 const startMission = () => {
 
+
   elmMissionHeadline.setAttribute('visible', 'true');
   elmMissionTargetImg.setAttribute('visible', 'true');
+  
 
   // ミッションタイトル
   elmMissionTitle =  document.createElement('a-text');
   elmMissionTitle.setAttribute('color', 'orange');
   elmMissionTitle.setAttribute('font', fonts.main);
-  elmMissionTitle.setAttribute('width', '6');
+  elmMissionTitle.setAttribute('width', '7');
   elmMissionTitle.setAttribute('negate', 'false');
   elmMissionTitle.setAttribute('align', 'center');
   elmMissionTitle.setAttribute('value', nowSceneData.mission.title);
@@ -367,17 +326,22 @@ const startMission = () => {
   elmTextArea.appendChild(elmMissionTitle);
 
   elmNextBtn.setAttribute('visible', 'false');
-
+  elmPersonArea.setAttribute('visible', 'false');
 }
 
 
 
 // ミッションを達成した時
 const missionSuccess = () => {
+  // SE
+  document.getElementById('se').play();
+
+  console.log('test');
   elmMissionHeadline.setAttribute('visible', 'false');
 
   elmTextArea.removeChild(elmMissionTitle);
   elmNextBtn.setAttribute('visible', 'true');
+  elmPersonArea.setAttribute('visible', 'true');
   elmMissionTargetImg.setAttribute('visible', 'false');
   // elmText.setAttribute('visible', 'true');
 
@@ -393,17 +357,87 @@ const missionSuccess = () => {
 
 // ゲームクリア
 const endGame = () => {
+  document.getElementById('bgm').pause();
+  document.getElementById('gameclear').play();
+
   elmTextArea.setAttribute('visible', 'false');
   elmNextBtn.setAttribute('visible', 'false');
+  elmPersonArea.setAttribute('visible', 'false');
 
   let elmCongrats = document.createElement('a-text');
   elmCongrats.setAttribute('value', 'ゲームクリア！');
-  elmCongrats.setAttribute('color', 'white');
+  elmCongrats.setAttribute('color', '#FBBC05');
   elmCongrats.setAttribute('font', fonts.main);
   elmCongrats.setAttribute('width', '15');
   elmCongrats.setAttribute('negate', 'false');
   elmCongrats.setAttribute('align', 'center');
-  elmCongrats.setAttribute('position', '0 1.4 -4');
+  elmCongrats.setAttribute('position', '0 2.2 -4');
+
+  let elmTakenokoImg = document.createElement('a-image');
+  elmTakenokoImg.setAttribute('src', 'images/other/take2-1-07.png');
+  elmTakenokoImg.setAttribute('position', '0 0.8 -4.1');
+  elmTakenokoImg.setAttribute('width', '1');
+  elmTakenokoImg.setAttribute('height', '1.7');
+  
 
   elmScene.appendChild(elmCongrats);
+  elmScene.appendChild(elmTakenokoImg);
 }
+
+
+
+// 効果音
+// const playSE = () => {
+//   document.getElementById('playSE').play();
+// }
+
+
+
+// のこたん救出用の割り込みミッション
+// 一時的にstartMission()をコピペ
+const rescueNokotan = () => {
+  elmMissionHeadline.setAttribute('visible', 'true');
+  elmMissionTargetImg.setAttribute('visible', 'true');
+  
+
+  // ミッションタイトル
+  elmMissionTitle =  document.createElement('a-text');
+  elmMissionTitle.setAttribute('color', 'orange');
+  elmMissionTitle.setAttribute('font', fonts.main);
+  elmMissionTitle.setAttribute('width', '7');
+  elmMissionTitle.setAttribute('negate', 'false');
+  elmMissionTitle.setAttribute('align', 'center');
+  elmMissionTitle.setAttribute('value', 'のこたんをたすけよう');
+  elmMissionTitle.setAttribute('position', '0 0 0.1');
+  elmMissionTitle.id = 'mission-title';
+  elmTextArea.appendChild(elmMissionTitle);
+
+  elmNextBtn.setAttribute('visible', 'false');
+  elmPersonArea.setAttribute('visible', 'false');
+
+
+  elmMissionTargetImg.setAttribute('src', 'images/target/nokotan.png');
+  elmMissionTargetImg.setAttribute('position', '0 0 6');
+  elmMissionTargetImg.setAttribute('rotation', '0 -180 0');
+  elmMissionTargetImg.setAttribute('visible', 'true');
+
+  // アスペクト比
+  elmMissionTargetImg.setAttribute('width', '0.6');
+  elmMissionTargetImg.setAttribute('height', '0.75');
+
+
+  nowSceneData.scenario[nowScenarioNum][2] = null;
+}
+
+
+
+
+// New Component (Click event)
+AFRAME.registerComponent('cursor-listener', {
+  init: function () {
+    this.el.addEventListener('click', function () {
+      let funcName = this.getAttribute('cursor-listener');
+      eval(funcName);
+    });
+  }
+});

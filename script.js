@@ -161,13 +161,13 @@ const startGame = () => {
   }
 
 
-  let elmBGM = document.createElement('audio');
-  elmBGM.setAttribute('src', 'sounds/bgm/bgm_maoudamashii_8bit22.mp3');
-  elmBGM.setAttribute('loop', 'loop');
-  elmBGM.setAttribute('autoplay', 'autoplay');
-  elmBGM.id = 'bgm';
-  elmBGM.volume = 0.1;
-  document.getElementsByTagName('body')[0].appendChild(elmBGM);
+  // let elmBGM = document.createElement('audio');
+  // elmBGM.setAttribute('src', 'sounds/bgm/bgm_maoudamashii_8bit22.mp3');
+  // elmBGM.setAttribute('loop', 'loop');
+  // elmBGM.setAttribute('autoplay', 'autoplay');
+  // elmBGM.id = 'bgm';
+  // elmBGM.volume = 0.1;
+  // document.getElementsByTagName('body')[0].appendChild(elmBGM);
 
   let elmSoundGameclear = document.createElement('audio');
   elmSoundGameclear.setAttribute('src', 'sounds/sound-effect/game_maoudamashii_9_jingle01.mp3');
@@ -357,7 +357,7 @@ const missionSuccess = () => {
 
 // ゲームクリア
 const endGame = () => {
-  document.getElementById('bgm').pause();
+  // document.getElementById('bgm').pause();
   document.getElementById('gameclear').play();
 
   elmTextArea.setAttribute('visible', 'false');
